@@ -1,26 +1,166 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* =============================================================================
+   Atelier Store — global design system
+   Visual language: editorial fashion retail (warm neutrals, hairline borders,
+   generous whitespace, tracked uppercase labels, serif display / sans body).
+   No third-party brand assets, copy or color values were copied — tokens below
+   are original values chosen to express the same structural principles.
+   ============================================================================= */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ---- Color ---------------------------------------------------------- */
+  --color-ink: #17140f;
+  --color-ink-soft: #4a453b;
+  --color-ink-faint: #8a8477;
+  --color-paper: #faf8f4;
+  --color-paper-alt: #f1ede4;
+  --color-sand: #e7ddc9;
+  --color-line: #ddd2b8;
+  --color-accent: #7c6a45;
+  --color-accent-strong: #5c4d30;
+  --color-error: #9a3324;
+
+  /* ---- Typography ------------------------------------------------------ */
+  --font-display: var(--font-display-serif), Georgia, serif;
+  --font-sans: var(--font-body-sans), Arial, Helvetica, sans-serif;
+
+  /* small tracked caption/eyebrow label used above headings and on nav */
+  --text-eyebrow: 0.6875rem;
+  --text-eyebrow--line-height: 1rem;
+  --text-eyebrow--letter-spacing: 0.22em;
+
+  /* editorial display sizes for hero / section headings */
+  --text-display-sm: 2.25rem;
+  --text-display-sm--line-height: 2.5rem;
+  --text-display-md: 3rem;
+  --text-display-md--line-height: 3.25rem;
+  --text-display-lg: 4.5rem;
+  --text-display-lg--line-height: 4.75rem;
+
+  --tracking-luxe: 0.2em;
+
+  /* ---- Spacing rhythm ---------------------------------------------------- */
+  --spacing-gutter: 1.25rem;
+  --spacing-section-sm: 3rem;
+  --spacing-section: 5rem;
+  --spacing-section-lg: 8rem;
+
+  /* ---- Containers -------------------------------------------------------- */
+  --container-narrow: 40rem;
+  --container-content: 90rem;
+
+  /* ---- Radius: retail-luxe stays close to square; pill reserved for chips */
+  --radius-none: 0px;
+  --radius-pill: 999px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* -----------------------------------------------------------------------
+   Base element defaults
+   ----------------------------------------------------------------------- */
+@layer base {
+  /* Tailwind v4 defaults border-color to currentColor; pin it to a token
+     so bare `border` utilities read as hairline dividers, not text-colored. */
+  *,
+  ::after,
+  ::before {
+    border-color: var(--color-line);
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans text-base leading-relaxed antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-normal tracking-tight text-ink;
+  }
+
+  a {
+    @apply underline-offset-4;
+  }
+
+  ::selection {
+    @apply bg-ink text-paper;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* -----------------------------------------------------------------------
+   Reusable primitives
+   ----------------------------------------------------------------------- */
+@layer components {
+  /* Page container: fixed max width, fluid gutters */
+  .container-fashion {
+    @apply mx-auto w-full max-w-content px-gutter sm:px-8 lg:px-12;
+  }
+
+  .container-fashion-narrow {
+    @apply mx-auto w-full max-w-narrow px-gutter sm:px-8;
+  }
+
+  /* Hairline divider used between sections and around product grids */
+  .divider {
+    @apply h-px w-full bg-line;
+  }
+
+  /* Small tracked uppercase label ("eyebrow") above headings */
+  .eyebrow {
+    @apply block text-eyebrow font-medium uppercase text-ink-faint;
+  }
+
+  /* Primary navigation / utility links: uppercase, tracked, quiet by default */
+  .nav-link {
+    @apply text-eyebrow font-medium uppercase text-ink-soft transition-colors duration-200 ease-out hover:text-ink;
+  }
+
+  /* Inline text link with an animated underline, for body copy and footers */
+  .link-underline {
+    @apply relative inline-block;
+  }
+  .link-underline::after {
+    content: "";
+    @apply pointer-events-none absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-current transition-transform duration-300 ease-out;
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    @apply scale-x-100;
+  }
+
+  /* Buttons: compose `.btn` with exactly one variant, e.g. `btn btn-primary` */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap border px-7 py-3 text-eyebrow font-medium uppercase tracking-luxe transition-colors duration-200 ease-out disabled:pointer-events-none disabled:opacity-40;
+  }
+  .btn-primary {
+    @apply border-ink bg-ink text-paper hover:bg-paper hover:text-ink;
+  }
+  .btn-outline {
+    @apply border-ink bg-transparent text-ink hover:bg-ink hover:text-paper;
+  }
+  .btn-ghost {
+    @apply border-transparent px-0 py-1 text-ink hover:border-b hover:border-ink;
+  }
+
+  /* Product card: image frame + name/price block, no hard borders.
+     Add the `group` class alongside this one in markup to enable the
+     hover zoom on `.product-card__frame img`. */
+  .product-card {
+    @apply flex flex-col gap-4;
+  }
+  .product-card__frame {
+    @apply relative aspect-3/4 w-full overflow-hidden bg-paper-alt;
+  }
+  .product-card__frame img {
+    @apply h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105;
+  }
+  .product-card__title {
+    @apply text-sm text-ink;
+  }
+  .product-card__price {
+    @apply text-sm text-ink-soft;
+  }
 }
