@@ -20,6 +20,21 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Database administration
+
+`npm run db:studio` is disabled because the locked `drizzle-kit` 0.31.11 Studio
+server accepts unauthenticated SQL requests using `DATABASE_URL`. Its loopback
+listener still permits other local users or processes to query or modify data
+with that database role's permissions, and its CORS policy allows any origin.
+The storefront's login does not protect this separate server.
+
+Do not bypass this guard by launching `drizzle-kit studio` directly. Stop any
+Studio instance already running. Use a database client that authenticates directly
+to Postgres with a role limited to the permissions needed for the session.
+Re-enable Studio only after verifying an implementation that authenticates every
+privileged request, restricts browser origins to the intended interface, and binds
+to loopback.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
