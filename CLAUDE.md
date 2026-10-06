@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run db:generate` — generate a Drizzle migration from `src/db/schema.ts`
 - `npm run db:migrate` — apply pending Drizzle migrations
 - `npm run db:push` — push schema changes directly to the DB (no migration file)
-- `npm run db:studio` — open Drizzle Studio
+- `npm run db:studio` — disabled because the installed Studio server lacks authentication (see README.md)
 
 There is no test runner configured in this repo.
 

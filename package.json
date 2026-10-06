@@ -10,7 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
+    "db:studio": "node -e \"console.error('Drizzle Studio is disabled: the installed server exposes database access without authentication. See README.md.'); process.exit(1)\" --",
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
